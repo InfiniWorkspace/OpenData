@@ -4,7 +4,7 @@
 from pathlib import Path
 import os
 import pandas as pd
-
+from functions import *
 
 ######################################################## TOOL CONFIG #######################################################
 # Specify the directory path
@@ -14,54 +14,40 @@ all_years_one_document = False
 
 group_by_method = "MEAN"
 
+indicador_column = "Indicador"
+
 year_column = "Any"
 
-name_disctrict_column = "Nom_Districte"
+name_district_column = "Nom_Districte"
+
+total_column = "Total"
+
+# If we need to group for more things than any and nom districte
+added_group_by = []
+
+# 
+indicador_prefijo = "Evolución parque vehiculos"
+indicador_columnas = ["Codi_Districte","Codi_Districte"]
 
 ####################################################### CODE ##############################################################
 
-# Get all files in the directory
-files = directory.glob('*')
+dataframes_names,dict_of_dataframes = get_dfs(directory)
 
+common_columns = get_common_columns_along_dfs(dict_of_dataframes,dataframes_names)
 
-dict_of_dataframes = {}
-dataframes_names = []
+combined_df = combine_dfs(dict_of_dataframes,dataframes_names,common_columns)
+print(combined_df)
 
-# Print the list of files
-for file_path in files:
-    # Read the file into a DataFrame
-    df = pd.read_csv(file_path)  
-    # Get the df name
-    df_name = str(file_path).split("\\")[-1]
-    dataframes_names.append(df_name)
-    # Store the DataFrame in the dictionary with the file name as key
-    dict_of_dataframes[df_name] = df
+columns_remaining = [indicador_column,name_district_column,total_column,year_column]
 
+combined_df = set_indicador_column_and_delete_columns(combined_df,indicador_prefijo,indicador_columnas,columns_remaining)
 
-common_columns = set(dict_of_dataframes[dataframes_names[0]].columns)
+resulting_df = get_grouped_df(combined_df,columns_remaining,group_by_method)
 
-print(common_columns)
+resulting_df.to_csv("ProcessData/output_files/output.csv",index=False)
 
-# Iterate over the rest of the DataFrames and find the intersection of columns
-for df in dict_of_dataframes.values():
-    common_columns = common_columns.intersection(df.columns)
+print(resulting_df)
 
-# Make the instesection a list
-common_columns = list(common_columns)
-
-for df_name in dataframes_names:
-    # get the dataframe with the subset of columns and store them back in the dictionary
-    dict_of_dataframes[df_name] = dict_of_dataframes[df_name][list(common_columns)].copy()
-
-
-combined_df = pd.concat(list(dict_of_dataframes.values()), ignore_index=True)
-combined_df.reset_index(drop=True, inplace=True)
-
-if group_by_method == "MEAN":
-    grouped_df = combined_df.groupby(['Any', 'Nom_Districte']).sum().reset_index()
-
-grouped_df = grouped_df[[]]
-print(grouped_df)
 ### Selecciones columnes: 
     # Nom_Districte/ID
     # Total
