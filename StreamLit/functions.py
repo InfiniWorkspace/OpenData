@@ -70,6 +70,9 @@ def get_grouped_df(combined_df,columns_remaining,group_by_method):
     elif group_by_method == "SUM":
         grouped_df = combined_df.groupby(['Indicador','Any', 'Nom_Districte']).sum().reset_index()
 
+    elif group_by_method == "COUNT":
+        grouped_df = combined_df.groupby(['Indicador','Any', 'Nom_Districte']).count().reset_index()
+
     # reorder columns
     grouped_df = grouped_df[columns_remaining]
 
