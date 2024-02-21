@@ -54,7 +54,7 @@ def set_indicador_column_and_delete_columns(combined_df,indicador_prefijo,indica
 
     if indicador_columnas:
         for ind in indicador_columnas:
-            combined_df["Indicador"]  = combined_df["Indicador"] + combined_df[ind]
+            combined_df["Indicador"]  = combined_df["Indicador"] +"-"+ combined_df[ind]
 
     # get the minimum columns required
     # get stay 
