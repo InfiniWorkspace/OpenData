@@ -11,7 +11,7 @@ def main():
 
     # File upload
     st.subheader("Upload Files")
-    uploaded_files = st.file_uploader("Upload your CSV or Excel files", type=["csv", "xlsx"], accept_multiple_files=True)
+    uploaded_files = st.file_uploader("Upload your CSV or Excel files. If uploading csv files fails, convert it to xlsx via Excel and upload the excel file.", type=["csv", "xlsx"], accept_multiple_files=True)
     
     
     dict_of_dataframes = {}
