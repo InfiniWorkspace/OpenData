@@ -62,7 +62,7 @@ def main():
         combined_df = set_indicador_column_and_delete_columns(combined_df,indicador_prefijo,indicador_columnas,columns_remaining)
 
         if year_column_is_datetime:
-            combined_df[year_column] = combined_df[year_column].astype(str).str[0:3]
+            combined_df[year_column] = combined_df[year_column].astype(str).str[0:4]
 
         resulting_df = get_grouped_df(combined_df,columns_remaining,group_by_method,name_district_column,year_column)
 
