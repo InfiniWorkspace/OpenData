@@ -62,16 +62,17 @@ def set_indicador_column_and_delete_columns(combined_df,indicador_prefijo,indica
 
     return combined_df
 
-def get_grouped_df(combined_df,columns_remaining,group_by_method):
+def get_grouped_df(combined_df,columns_remaining,group_by_method,name_district_column,year_column):
     # Group by indicador, any and nom districte
+    
     if group_by_method == "MEAN":
-        grouped_df = combined_df.groupby(['Indicador','Any', 'Nom_Districte']).mean().reset_index()
+        grouped_df = combined_df.groupby(['Indicador',year_column, name_district_column]).mean().reset_index()
 
     elif group_by_method == "SUM":
-        grouped_df = combined_df.groupby(['Indicador','Any', 'Nom_Districte']).sum().reset_index()
+        grouped_df = combined_df.groupby(['Indicador',year_column, name_district_column]).sum().reset_index()
 
     elif group_by_method == "COUNT":
-        grouped_df = combined_df.groupby(['Indicador','Any', 'Nom_Districte']).count().reset_index()
+        grouped_df = combined_df.groupby(['Indicador',year_column, name_district_column]).count().reset_index()
 
     # reorder columns
     grouped_df = grouped_df[columns_remaining]
